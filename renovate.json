@@ -1,0 +1,18 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchPackageNames": [
+        "marocchino/sticky-pull-request-comment"
+      ],
+      "enabled": false,
+      "description": "Managed by Drainpipe"
+    }
+  ]
+}

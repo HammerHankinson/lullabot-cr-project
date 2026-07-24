@@ -20,7 +20,8 @@
         "drupal/core-project-message": "^11.4",
         "drupal/core-recipe-unpack": "^11.4",
         "drupal/core-recommended": "^11.4",
-        "drush/drush": "^13.7"
+        "drush/drush": "^13.7",
+        "lullabot/drainpipe": "^6.1"
     },
     "conflict": {
         "drupal/drupal": "*"
@@ -30,13 +31,15 @@
     "config": {
         "allow-plugins": {
             "composer/installers": true,
-            "drupal/core-composer-scaffold": true,
-            "drupal/core-recipe-unpack": true,
-            "drupal/core-project-message": true,
-            "phpstan/extension-installer": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
+            "drupal/core-composer-scaffold": true,
+            "drupal/core-project-message": true,
+            "drupal/core-recipe-unpack": true,
+            "lullabot/drainpipe": true,
+            "lullabot/drainpipe-dev": true,
             "php-http/discovery": true,
             "php-tuf/composer-integration": true,
+            "phpstan/extension-installer": true,
             "symfony/runtime": true
         },
         "sort-packages": true
@@ -45,7 +48,9 @@
         "drupal-scaffold": {
             "locations": {
                 "web-root": "web/"
-            }
+            },
+            "gitignore": "true",
+            "allowed-packages": ["lullabot/drainpipe", "lullabot/drainpipe-dev"]
         },
         "installer-paths": {
             "web/core": [
@@ -100,5 +105,11 @@
                 "      composer remove drupal/core-project-message"
             ]
         }
+    },
+    "autoload-dev": {
+        "files": ["vendor/lullabot/drainpipe/scaffold/env/dotenv.php"]
+    },
+    "require-dev": {
+        "lullabot/drainpipe-dev": "^6.1"
     }
 }
