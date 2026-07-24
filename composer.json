@@ -109,7 +109,10 @@
             "github": {
                 "TestStatic": true
             },
-            "tugboat": {}
+            "tugboat": {},
+            "untracked-ignore": [
+                "drainpipe/"
+            ]
         }
     },
     "autoload-dev": {
