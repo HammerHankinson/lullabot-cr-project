@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<ruleset>
+    <description>Project PHP_CodeSniffer configuration</description>
+
+    <rule ref="phpcs.xml.dist"/>
+
+    <!-- Exclude files generated and managed by Drainpipe. -->
+    <exclude-pattern>web/sites/default/settings.tugboat.php</exclude-pattern>
+</ruleset>
