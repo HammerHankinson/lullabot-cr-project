@@ -1,0 +1,29 @@
+name: 'Configure ssh'
+description: 'Configures SSH'
+inputs:
+  ssh-private-key:
+    description: "SSH Private Key"
+    required: true
+  ssh-known-hosts:
+    description: "SSH Known Hosts"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        sudo apt-get update
+        sudo apt-get install -y openssh-client
+        eval $(ssh-agent -s)
+        echo "$INPUT_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+        mkdir -p ~/.ssh
+        chmod 700 ~/.ssh
+        touch ~/.ssh/config
+        chmod 600 ~/.ssh/config
+        if [ "$INPUT_SSH_KNOWN_HOSTS" != "" ]; then
+          echo "$INPUT_SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+        fi
+      shell: bash
+      env:
+        INPUT_SSH_PRIVATE_KEY: ${{ inputs.ssh-private-key }}
+        INPUT_SSH_KNOWN_HOSTS: ${{ inputs.ssh-known-hosts }}

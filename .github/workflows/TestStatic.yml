@@ -1,0 +1,56 @@
+name: "Static Tests"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  Static-Tests:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      checks: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+        with:
+          path: ${{ github.workspace }}/.ddev/.drainpipe-composer-cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - uses: ./.github/actions/drainpipe/set-env
+
+      - name: Install and Start DDEV
+        uses: ./.github/actions/drainpipe/ddev
+
+      - name: Install Project
+        run: ddev composer install
+
+      - name: Run Static Tests
+        run: ddev task test:static
+
+      - name: Upload test artifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: test_result
+          path: test_result
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@c950f6fb443cb5af20a377fd0dfaa78838901040 # v2.23.0
+        if: always()
+        with:
+          comment_mode: off
+          files: |
+            test_result/**/*.xml

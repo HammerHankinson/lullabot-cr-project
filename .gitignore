@@ -25,6 +25,10 @@ web/sites/*/private
 /.env
 /.env.defaults
 
+# Test artifacts.
+/test_result/
+/.twig-cs-fixer.cache
+
 .DS_Store
 
 /.twig-cs-fixer.dist.php

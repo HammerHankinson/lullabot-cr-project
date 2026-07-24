@@ -1,0 +1,82 @@
+name: 'Install and Start DDEV'
+description: 'Installs the latest or specified version of DDEV and starts the project'
+inputs:
+  ssh-private-key:
+    description: "SSH Private Key"
+    required: false
+  ssh-known-hosts:
+    description: "SSH Known Hosts"
+    required: false
+  git-email:
+    description: "Git e-mail address"
+    required: false
+  git-name:
+    description: "Git name"
+    required: false
+  composer-cache-dir:
+    description: "Composer cache directory, relative to the project workspace. Set to false to disable."
+    required: false
+  version:
+    description: "Override the DDEV version e.g. '1.19.0'"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: Configure SSH keys
+      shell: bash
+      env:
+        INPUT_SSH_PRIVATE_KEY: ${{ inputs.ssh-private-key }}
+        INPUT_SSH_KNOWN_HOSTS: ${{ inputs.ssh-known-hosts }}
+      run: |
+        mkdir -p .ddev/homeadditions/.ssh
+        touch .ddev/homeadditions/.ssh/config
+        if [ "$INPUT_SSH_PRIVATE_KEY" != "" ]; then
+          echo "$INPUT_SSH_PRIVATE_KEY" > .ddev/homeadditions/.ssh/id_drainpipe
+          chmod 600 .ddev/homeadditions/.ssh/id_drainpipe
+          echo "IdentityFile ~/.ssh/id_drainpipe" >> .ddev/homeadditions/.ssh/config
+        fi
+        if [ "$INPUT_SSH_KNOWN_HOSTS" != "" ]; then
+          echo "$INPUT_SSH_KNOWN_HOSTS" > .ddev/homeadditions/.ssh/known_hosts
+          chmod 644 .ddev/homeadditions/.ssh/known_hosts
+        fi
+        if [ -f "pantheon.yml" ]; then
+          echo -e "Host *.drush.in\\n\\tStrictHostKeyChecking no\\n\tLogLevel ERROR\\n" >> .ddev/homeadditions/.ssh/config
+        fi
+        chmod 600 .ddev/homeadditions/.ssh/config
+        chmod 700 .ddev/homeadditions/.ssh
+
+    - name: Install DDEV
+      uses: ddev/github-action-setup-ddev@fdf2f5c97943bae638f31df6df86f1defa6210c0 # v1
+      with:
+        version: ${{ inputs.version || 'latest' }}
+        autostart: 'false'
+
+    - name: Configure Composer cache and start DDEV
+      shell: bash
+      env:
+        INPUT_COMPOSER_CACHE_DIR: ${{ inputs.composer-cache-dir }}
+      run: |
+        if [ "$INPUT_COMPOSER_CACHE_DIR" != "false" ]; then
+          CACHE_DIR=".ddev/.drainpipe-composer-cache"
+          if [ "$INPUT_COMPOSER_CACHE_DIR" != "" ]; then
+            CACHE_DIR="$INPUT_COMPOSER_CACHE_DIR"
+          fi
+          # Workaround for https://github.com/ddev/ddev/issues/6044
+          if yq -re .type .ddev/config.yaml; then
+            ddev config --web-environment-add="COMPOSER_CACHE_DIR=/var/www/html/$CACHE_DIR" --project-type="$(yq -re .type .ddev/config.yaml)"
+          else
+            ddev config --web-environment-add="COMPOSER_CACHE_DIR=/var/www/html/$CACHE_DIR"
+          fi
+        fi
+        ddev start
+        ddev describe
+
+    - name: Configure git credentials
+      shell: bash
+      env:
+        INPUT_GIT_NAME: ${{ inputs.git-name }}
+        INPUT_GIT_EMAIL: ${{ inputs.git-email }}
+      run: |
+        ddev exec "git config --global user.name \"$INPUT_GIT_NAME\""
+        ddev exec "git config --global user.email \"$INPUT_GIT_EMAIL\""
+        echo "DRAINPIPE_DDEV=true" >> $GITHUB_ENV
