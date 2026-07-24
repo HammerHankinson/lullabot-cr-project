@@ -38,6 +38,11 @@ tasks:
       - ./vendor/bin/drush site:install -y
       - echo "🧹 Sanitising database"
       - ./vendor/bin/drush sql:sanitize --yes
+    
+  sync:tugboat:
+    desc: "Install Drupal from exported configuration in Tugboat"
+    cmds:
+      - task: drupal:install
 
   build:
     desc: "Builds the project for production"
