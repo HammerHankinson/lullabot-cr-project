@@ -108,7 +108,8 @@
         "drainpipe": {
             "github": {
                 "TestStatic": true
-            }
+            },
+            "tugboat": {}
         }
     },
     "autoload-dev": {
