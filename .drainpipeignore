@@ -32,6 +32,7 @@
 
 # Local build orchestration.
 /Taskfile.yml
+/.task/
 /.nvmrc
 
 # Database exports.

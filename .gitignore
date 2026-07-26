@@ -28,6 +28,7 @@ web/sites/*/private
 # Test artifacts.
 /test_result/
 /.twig-cs-fixer.cache
+/.task/
 
 .DS_Store
 
