@@ -2,7 +2,7 @@ _core:
   default_config_hash: ijfbzDTN4CbE7Sr-6ubWzy_t1vH4OtU1doNCLssVz-4
 langcode: en
 uuid: 40b1e362-97d3-4c06-b0d5-e9dacd06aa80
-name: 'Drush Site-Install'
+name: 'Lullabot CR Project'
 mail: admin@example.com
 slogan: ''
 page:
