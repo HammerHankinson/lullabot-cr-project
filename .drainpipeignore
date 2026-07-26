@@ -1,0 +1,39 @@
+# Pantheon reserved paths.
+/web/sites/default/files/
+/sites/default/files/
+
+# Local development.
+/.ddev/
+/.env
+/.env.defaults
+/.idea/
+/.vscode/
+.DS_Store
+
+# Other deployment environments.
+/.github/
+/.tugboat/
+
+# Local Drupal settings.
+/web/sites/default/settings.ddev.php
+
+# Development and test tooling.
+/test/
+/test_result/
+/phpcs.xml
+/phpcs.xml.dist
+/phpstan.neon
+/phpstan.neon.dist
+/phpstan-baseline.neon
+/phpunit.xml
+/renovate.json
+/.twig-cs-fixer.cache
+/.twig-cs-fixer.dist.php
+
+# Local build orchestration.
+/Taskfile.yml
+/.nvmrc
+
+# Database exports.
+*.sql
+*.sql.gz

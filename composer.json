@@ -21,7 +21,8 @@
         "drupal/core-recipe-unpack": "^11.4",
         "drupal/core-recommended": "^11.4",
         "drush/drush": "^13.7",
-        "lullabot/drainpipe": "^6.1"
+        "lullabot/drainpipe": "^6.1",
+        "pantheon-systems/drupal-integrations": "^11"
     },
     "conflict": {
         "drupal/drupal": "*"

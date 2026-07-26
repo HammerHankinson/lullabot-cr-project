@@ -12,6 +12,7 @@ includes:
   snapshot: ./vendor/lullabot/drainpipe/tasks/snapshot.yml
   javascript: ./vendor/lullabot/drainpipe/tasks/javascript.yml
   tugboat: ./vendor/lullabot/drainpipe/tasks/tugboat.yml
+  pantheon: ./vendor/lullabot/drainpipe/tasks/pantheon.yml
   test:
     taskfile: ./vendor/lullabot/drainpipe-dev/tasks/test.yml
     optional: true
