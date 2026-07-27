@@ -30,6 +30,10 @@ web/sites/*/private
 /.twig-cs-fixer.cache
 /.task/
 
+# Local database dumps.
+*.sql
+*.sql.gz
+
 .DS_Store
 
 /.twig-cs-fixer.dist.php
